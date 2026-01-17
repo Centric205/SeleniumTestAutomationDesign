@@ -8,10 +8,193 @@
     <artifactId>FrameworkDesign2</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <name>Selenium Java TestNG Framework</name>
+    <description>Senior-level Selenium Java automation framework using TestNG</description>
+
+    <!-- ========================= -->
+    <!-- Java & Dependency Versions -->
+    <!-- ========================= -->
+
     <properties>
+        <java.version>24</java.version>
+
+        <selenium.version>4.20.0</selenium.version>
+        <testng.version>7.9.0</testng.version>
+        <webdrivermanager.version>5.7.0</webdrivermanager.version>
+
+        <log4j2.version>2.23.1</log4j2.version>
+        <extent.version>5.1.1</extent.version>
+
         <maven.compiler.source>24</maven.compiler.source>
         <maven.compiler.target>24</maven.compiler.target>
+
+        <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
+        <maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <!-- ========================= -->
+    <!-- Dependencies -->
+    <!-- ========================= -->
+    <dependencies>
+
+        <!-- Selenium -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
+        <!-- TestNG -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- WebDriverManager -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>${webdrivermanager.version}</version>
+        </dependency>
+
+        <!-- Log4j2 -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+
+        <!-- Extent Reports -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>${extent.version}</version>
+        </dependency>
+
+        <!-- Jackson (JSON Test Data Support) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.1</version>
+        </dependency>
+
+        <!-- Apache Commons Lang -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.9.0</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- ========================= -->
+    <!-- Maven Profiles -->
+    <!-- ========================= -->
+    <profiles>
+
+        <!-- Local Chrome -->
+        <profile>
+            <id>local-chrome</id>
+            <properties>
+                <browser>chrome</browser>
+                <execution.mode>local</execution.mode>
+                <env>qa</env>
+            </properties>
+        </profile>
+
+        <!-- Local Firefox -->
+        <profile>
+            <id>local-firefox</id>
+            <properties>
+                <browser>firefox</browser>
+                <execution.mode>local</execution.mode>
+                <env>qa</env>
+            </properties>
+        </profile>
+
+        <!-- Headless Chrome (CI) -->
+        <profile>
+            <id>ci-headless</id>
+            <properties>
+                <browser>chrome</browser>
+                <execution.mode>headless</execution.mode>
+                <env>qa</env>
+            </properties>
+        </profile>
+
+        <!-- Selenium Grid -->
+        <profile>
+            <id>grid</id>
+            <properties>
+                <browser>chrome</browser>
+                <execution.mode>grid</execution.mode>
+                <grid.url>http://localhost:4444/wd/hub</grid.url>
+                <env>qa</env>
+            </properties>
+        </profile>
+
+        <!-- Production Environment -->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <browser>chrome</browser>
+                <execution.mode>headless</execution.mode>
+                <env>prod</env>
+            </properties>
+        </profile>
+
+    </profiles>
+
+
+    <!-- ========================= -->
+    <!-- Build & Plugins -->
+    <!-- ========================= -->
+    <build>
+        <plugins>
+
+            <!-- Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <!-- Surefire Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.plugin.version}</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <parallel>methods</parallel>
+                    <threadCount>5</threadCount>
+                    <useUnlimitedThreads>false</useUnlimitedThreads>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
 
 </project>
