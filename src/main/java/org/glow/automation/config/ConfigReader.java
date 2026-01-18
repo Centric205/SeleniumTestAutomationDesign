@@ -31,7 +31,7 @@ public final class ConfigReader {
                     getClass()
                             .getClassLoader()
                             .getResourceAsStream(CONFIG_FILE_PATH)){
-            if (input != null) {
+            if (input == null) {
                 throw new RuntimeException("Unable to find " + CONFIG_FILE_PATH);
             }
 
@@ -46,8 +46,11 @@ public final class ConfigReader {
      * System property overrides config.properties
      */
     public String getProperty(String key) {
-        String systemValue = System.getProperty(key);
-        return systemValue != null ? systemValue : properties.getProperty(key);
+        String systemValue = System.getProperty(key, properties.getProperty(key));
+        if (systemValue == null) {
+            throw new RuntimeException("Missing configuration key: " + key);
+        }
+        return systemValue;
     }
 
     public int getIntProperty(String key) {
