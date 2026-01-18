@@ -78,4 +78,15 @@ public abstract class BasePage {
     protected String getText(By locator) {
         return waitForVisibility(locator).getText();
     }
+
+    /**
+     * Navigates to a given URL.
+     * Navigation is considered a common page responsibility,
+     * not a step-definition responsibility
+     *
+     * @param url application URL to navigate to
+     */
+    protected void navigateTo(String url) {
+        driver.get(url);
+    }
 }
