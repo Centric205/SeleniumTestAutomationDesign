@@ -1,5 +1,6 @@
 package org.glow.automation.pages.pageobjects;
 
+import org.glow.automation.config.ConfigReader;
 import org.glow.automation.pages.BasePage;
 import org.openqa.selenium.By;
 
@@ -29,6 +30,10 @@ public class LoginPage extends BasePage {
         /* =========================
        Page Actions using BasePage methods
        ========================= */
+    public void navigateToLoginPage() {
+        navigateTo(ConfigReader.getInstance().getProperty("base.url"));
+    }
+
     public LoginPage enterUsername(String username) {
         type(usernameInput, username);
         return this;
